@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELJDO AI Literacy Mapping</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            padding: 40px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+        
+        .phase-card {
+            margin-bottom: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .phase-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .phase-header {
+            padding: 25px 30px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+        
+        .phase-header:hover {
+            opacity: 0.9;
+        }
+        
+        .phase-e { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .phase-l { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .phase-j { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .phase-d { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .phase-o { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        
+        .phase-title {
+            color: white;
+        }
+        
+        .phase-name {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .dimension-label {
+            font-size: 0.95em;
+            opacity: 0.9;
+        }
+        
+        .toggle-icon {
+            color: white;
+            font-size: 1.5em;
+            transition: transform 0.3s ease;
+        }
+        
+        .toggle-icon.active {
+            transform: rotate(180deg);
+        }
+        
+        .phase-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            background: #f8f9fa;
+        }
+        
+        .phase-content.active {
+            max-height: 2000px;
+        }
+        
+        .content-inner {
+            padding: 30px;
+        }
+        
+        .core-question {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-left: 5px solid #3498db;
+        }
+        
+        .core-question h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .core-question p {
+            color: #555;
+            font-style: italic;
+            font-size: 1.05em;
+        }
+        
+        .skills-section h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+        
+        .skill-item {
+            background: white;
+            padding: 18px 20px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border-left: 4px solid #3498db;
+            transition: all 0.3s ease;
+        }
+        
+        .skill-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .skill-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 1.05em;
+        }
+        
+        .skill-desc {
+            color: #555;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+        
+        .frameworks {
+            margin-top: 25px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            border: 2px dashed #bdc3c7;
+        }
+        
+        .frameworks h4 {
+            color: #7f8c8d;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .frameworks p {
+            color: #555;
+            font-size: 0.9em;
+        }
+        
+        .legend {
+            margin-top: 40px;
+            padding: 25px;
+            background: #ecf0f1;
+            border-radius: 10px;
+        }
+        
+        .legend h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .legend-item {
+            margin-bottom: 10px;
+            color: #555;
+        }
+        
+        .expand-all {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+            }
+            .phase-content {
+                max-height: none !important;
+            }
+            .expand-all {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ELJDO Learning Arc</h1>
+        <p class="subtitle">AI Literacy Dimensions for Educators</p>
+        
+        <div class="expand-all">
+            <button class="btn" onclick="toggleAll()">Expand/Collapse All</button>
+        </div>
+        
+        <!-- E - EXPERIENCE -->
+        <div class="phase-card">
+            <div class="phase-header phase-e" onclick="togglePhase('e')">
+                <div class="phase-title">
+                    <div class="phase-name">E — Experience</div>
+                    <div class="dimension-label">Functional Dimension</div>
+                </div>
+                <div class="toggle-icon" id="icon-e">▼</div>
+            </div>
+            <div class="phase-content" id="content-e">
+                <div class="content-inner">
+                    <div class="core-question">
+                        <h3>Core Question</h3>
+                        <p>What happens when I encounter AI?</p>
+                    </div>
+                    
+                    <div class="skills-section">
+                        <h3>AI Literacy Sub-Skills</h3>
+                        
+                        <div class="skill-item">
+                            <div class="skill-title">1. Recognizing AI</div>
+                            <div class="skill-desc">
+                                • Identify when AI is present in tools and systems<br>
+                                • Distinguish between AI types (generative, algorithmic, predictive)<br>
+                                • Understand what different AI tools actually do
+                            </div>
+                        </div>
+                        
+                        <div class="skill-item">
+                            <div class="skill-title">2. Understanding AI Capabilities & Limitations</div>
+                            <div class="skill-desc">
+                                • Know what AI can and cannot do reliably<br>
+                                • Recognize AI's strengths (pattern recognition, generation, synthesis)<br>
+                                • Recognize AI's weaknesses (hallucination, bias, context-blindness)
+                            </div>
+                        </div>
+                        
+                        <div class="skill-item">
+                            <div class="skill-title">3. Experiential Knowledge of AI Behavior</div>
+                            <div class="skill-desc">
+                                • Learn through direct interaction how AI responds<br>
+                                • Recognize patterns in AI outputs (when it succeeds/fails)<br>
+                                • Develop intuition about AI's tendencies and limitations
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="frameworks">
+                        <h4>Research Framework Alignment</h4>
+                        <p><strong>Long & Magerko (2020):</strong> "What is AI?" and "What can AI do?"<br>
+                        <strong>Ng et al. (2021):</strong> "Know and recognize AI"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- L - LANGUAGE -->
+        <div class="phase-card">
+            <div class="phase-header phase-l" onclick="togglePhase('l')">
+                <div class="phase-title">
+                    <div class="phase-name">L — Language</div>
+                    <div class="dimension-label">Rhetorical Dimension</div>
+                </div>
+                <div class="toggle-icon" id="icon-l">▼</div>
+            </div>
+            <div class="phase-content" id="content-l">
+                <div class="content-inner">
+                    <div class="core-question">
+                        <h3>Core Question</h3>
+                        <p>How do I communicate my thinking to AI?</p>
+                    </div>
+                    
+                    <div class="skills-section">
+                        <h3>AI Literacy Sub-Skills</h3>
+                        
+                        <div class="skill-item">
+                            <div class="skill-title">1. Prompt Engineering / Prompting Competence</div>
+                            <div class="skill-desc">
+                                • Formulate clear, specific requests to AI<br>
+                                • Provide context, constraints, and examples<br>
+                                • Iterate and refine prompts based on output
+                            </div>
+                        </div>
+                        
+                        <div class="skill-item">
+                            <div class="skill-title">2. Communicating Intent & Context</div>
+                            <div class="skill-desc">
+                                • Make goals explicit to AI<br>
+                                • Specify desired format, tone, and level<br>
+                                • Articulate what you DON'T want AI to do
+                            </div>
+                        </div>
+                        
+                        <div class="skill-item">
+                            <div class="skill-title">3. Understanding AI as Communicative Partner</div>
+                            <div class="skill-desc">
+                                • Recognize how AI interprets language probabilistically<br>
+                                • Understand that vague input → vague output<br>
+                                • Treat prompting as instruction/teaching
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="frameworks">
+                        <h4>Research Framework Alignment</h4>
+                        <p><strong>Cardon et al. (2023):</strong> "Prompting and prompt patterns"<br>
+                        <strong>Long & Magerko (2020):</strong> "How AI works" (language models)<br>
+                        <strong>Ng et al. (2021):</strong> "Use and apply AI"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- J - JUDGMENT -->
+        <div class="phase-card">
+            <div class="phase-header phase-j" onclick="togglePhase('j')">
+                <div class="phase-title">
+                    <div class="phase-name">J — Judgment</div>
+                    <div class="dimension-label">Critical & Ethical Dimension</div>
+                </div>
+                <div class="toggle-icon" id="icon-j">▼</div>
+            </div>
+            <div class="phase-content" id="content-j">
+                <div class="content-inner">
+                    <div class="core-question">
+                        <h3>Core Question</h3>
+                        <p>Should I trust, use, or question this output?</p>
+                    </div>
+                    
+                    <div class="skills-section">
+                        <h3>AI Literacy Sub-Skills</h3>
+                        
+                        <div class="skill-item">
+                            <div class="skill-title">1. Critical Evaluation of AI Outputs</div>
+                            <div class="skill-desc">
+                                • Assess accuracy, relevance, and reliability<br>
+                                • Detect hallucinations, fabrications, and errors<br>
+                                • Compare AI output to authoritative sources
+                            </div>
+                        </div>
+                        
+                        <div class="skill-item">
+                            <div class="skill-title">2. Recognizing AI Bias & Limitations</div>
+                            <div class="skill-desc">
+                                • Identify bias in training data and outputs<br>
+                                • Understand systemic limitations (knowledge cutoffs, demographic gaps)<br>
+                                • Question whose perspectives are represented/missing
+                            </div>
+                        </div>
+                        
+                        <div class="skill-item">
+                            <div class="skill-title">3. Ethical Reasoning about AI Use</div>
+                            <div class="skill-desc">
+                                • Consider fairness, privacy, and accountability<br>
+                                • Evaluate impact on stakeholders (students, colleagues, society)<br>
+                                • Make value-based decisions about when NOT to use AI
+                            </div>
+                        </div>
+                        
+                        <div class="skill-item">
+                            <div class="skill-title">4. Verification & Fact-Checking Practices</div>
+                            <div class="skill-desc">
+                                • Cross-reference AI claims with reliable sources<br>
+                                • Apply epistemic standards (evidence, traceability, authority)<br>
+                                • Understand burden of verification when using AI
+                            </div>
+                        </div>
+                        
+                        <div class="skill-item">
+                            <div class="skill-title">5. Understanding AI's Social & Cultural Impact</div>
+                            <div class="skill-desc">
+                                • Recognize how AI shapes information access<br>
+                                • Consider implications for equity and power<br>
+                                • Understand AI's role in amplifying or mitigating inequality
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="frameworks">
+                        <h4>Research Framework Alignment</h4>
+                        <p><strong>Long & Magerko (2020):</strong> "Critical perspective on AI" and "AI ethics"<br>
+                        <strong>Ng et al. (2021):</strong> "Evaluate and create AI" and "AI ethics"<br>
+                        <strong>Southworth et al. (2023):</strong> "Critically engaging with AI systems"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- D - DESIGN -->
+        <div class="phase-card">
+            <div class="phase-header phase-d" onclick="togglePhase('d')">
+                <div class="phase-title">
+                    <div class="phase-name">D — Design</div>
+                    <div class="dimension-label">Pedagogical Dimension</div>
+                </div>
+                <div class="toggle-icon" id="icon-d">▼</div>
+            </div>
+            <div class="phase-content" id="content-d">
+                <div class="content-inner">
+                    <div class="core-question">
+                        <h3>Core Question</h3>
+                        <p>How can I use AI pedagogically without losing control?</p>
+                    </div>
+                    
+                    <div class="skills-section">
+                        <h3>AI Literacy Sub-Skills</h3>
+                        
+                        <div class="skill-item">
+                            <div class="skill-title">1. Pedagogical Integration of AI</div>
+                            <div class="skill-desc">
+                                • Design learning activities that use AI appropriately<br>
+                                • Align AI use with learning objectives<br>
+                                • Ensure AI supports rather than replaces thinking
+                            </div>
+                        </div>
+                        
+                        <div class="skill-item">
+                            <div class="skill-title">2. Task Design for AI-Enhanced Learning</div>
+                            <div class="skill-desc">
+                                • Create tasks where AI role is clear and bounded<br>
+                                • Scaffold AI use for student learning<br>
+                                • Design assessments that reveal understanding (not just AI-assisted output)
+                            </div>
+                        </div>
+                        
+                        <div class="skill-item">
+                            <div class="skill-title">3. Understanding AI's Role in Learning Processes</div>
+                            <div class="skill-desc">
+                                • Know when AI helps learning vs. hinders it<br>
+                                • Recognize cognitive load implications<br>
+                                • Understand transfer and dependency risks
+                            </div>
+                        </div>
+                        
+                        <div class="skill-item">
+                            <div class="skill-title">4. Instructional Decision-Making with AI</div>
+                            <div class="skill-desc">
+                                • Choose appropriate AI tools for specific learning goals<br>
+                                • Decide what should remain human-mediated<br>
+                                • Balance efficiency with pedagogical quality
+                            </div>
+                        </div>
+                        
+                        <div class="skill-item">
+                            <div class="skill-title">5. Creating AI Literacy Learning Experiences</div>
+                            <div class="skill-desc">
+                                • Teach students to use AI critically and responsibly<br>
+                                • Design opportunities for students to develop AI competencies<br>
+                                • Model thoughtful AI integration
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="frameworks">
+                        <h4>Research Framework Alignment</h4>
+                        <p><strong>Southworth et al. (2023):</strong> "Design and use of AI in education"<br>
+                        <strong>Cardon et al. (2023):</strong> "AI for teaching and learning"<br>
+                        <strong>Ng et al. (2021):</strong> "Create with AI" (educational context)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- O - OWN -->
+        <div class="phase-card">
+            <div class="phase-header phase-o" onclick="togglePhase('o')">
+                <div class="phase-title">
+                    <div class="phase-name">O — Own</div>
+                    <div class="dimension-label">Agential Dimension</div>
+                </div>
+                <div class="toggle-icon" id="icon-o">▼</div>
+            </div>
+            <div class="phase-content" id="content-o">
+                <div class="content-inner">
+                    <div class="core-question">
+                        <h3>Core Question</h3>
+                        <p>What is my professional stance on AI?</p>
+                    </div>
+                    
+                    <div class="skills-section">
+                        <h3>AI Literacy Sub-Skills</h3>
+                        
+                        <div class="skill-item">
+                            <div class="skill-title">1. Metacognitive Awareness of AI Use</div>
+                            <div class="skill-desc">
+                                • Reflect on how AI affects your thinking and work<br>
+                                • Recognize when you're over-relying on AI<br>
+                                • Understand your own learning/working process with AI
+                            </div>
+                        </div>
+                        
+                        <div class="skill-item">
+                            <div class="skill-title">2. Professional Agency & Responsibility</div>
+                            <div class="skill-desc">
+                                • Maintain ownership of outputs regardless of AI involvement<br>
+                                • Take accountability for quality and accuracy<br>
+                                • Claim authorship and professional judgment
+                            </div>
+                        </div>
+                        
+                        <div class="skill-item">
+                            <div class="skill-title">3. Ethical Stance & Professional Identity</div>
+                            <div class="skill-desc">
+                                • Articulate personal/professional values regarding AI<br>
+                                • Make principled decisions about AI use<br>
+                                • Position yourself in relation to AI (tool user, not tool-dependent)
+                            </div>
+                        </div>
+                        
+                        <div class="skill-item">
+                            <div class="skill-title">4. Self-Regulation of AI Use</div>
+                            <div class="skill-desc">
+                                • Set boundaries on when/how to use AI<br>
+                                • Monitor dependency and maintain independent capability<br>
+                                • Develop sustainable practices that preserve expertise
+                            </div>
+                        </div>
+                        
+                        <div class="skill-item">
+                            <div class="skill-title">5. Advocacy & Policy Engagement</div>
+                            <div class="skill-desc">
+                                • Contribute to institutional AI policies<br>
+                                • Advocate for responsible AI integration<br>
+                                • Participate in professional discourse about AI in education
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="frameworks">
+                        <h4>Research Framework Alignment</h4>
+                        <p><strong>Long & Magerko (2020):</strong> Implicit in "critical perspective"<br>
+                        <strong>Ng et al. (2021):</strong> "Ethical use of AI" (personal responsibility)<br>
+                        <strong>Cardon et al. (2023):</strong> "Professional use of AI" and "ethical considerations"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- LEGEND -->
+        <div class="legend">
+            <h3>Key Research Frameworks</h3>
+            <div class="legend-item">
+                <strong>Long & Magerko (2020):</strong> Five Big Ideas in AI Literacy
+            </div>
+            <div class="legend-item">
+                <strong>Ng et al. (2021):</strong> AI Literacy Framework (Know, Use, Evaluate, Ethics)
+            </div>
+            <div class="legend-item">
+                <strong>Cardon et al. (2023):</strong> Professional AI Literacy for Business/Education
+            </div>
+            <div class="legend-item">
+                <strong>Southworth et al. (2023):</strong> AI Literacy in Educational Contexts
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function togglePhase(phase) {
+            const content = document.getElementById('content-' + phase);
+            const icon = document.getElementById('icon-' + phase);
+            
+            content.classList.toggle('active');
+            icon.classList.toggle('active');
+        }
+        
+        let allExpanded = false;
+        
+        function toggleAll() {
+            const phases = ['e', 'l', 'j', 'd', 'o'];
+            allExpanded = !allExpanded;
+            
+            phases.forEach(phase => {
+                const content = document.getElementById('content-' + phase);
+                const icon = document.getElementById('icon-' + phase);
+                
+                if (allExpanded) {
+                    content.classList.add('active');
+                    icon.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                    icon.classList.remove('active');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
